@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="triangle" class="com.programmingsearch.java.Triangle">
+		<property name="message" value="Hello World" />
+	</bean>
+	<bean id="circle" class="com.programmingsearch.java.Circle"></bean>
+
+	<bean id="point" class="com.programmingsearch.java.Point">
+		<property name="pointX" value="${con.key1}" />
+		<property name="pointY" value="${point.pointY}" />
+	</bean>
+	
+
+	<bean class="com.programmingsearch.java.TestType" id="testType" />
+	<bean class="com.programmingsearch.java.ByTypeExample" id="bytypeExample"
+		autowire="byType">
+	</bean>
+	
+
+	<bean id="initDestroyExample" class="com.programmingsearch.java.InitDestroyExample">
+		<property name="message" value="Hello World" />
+	</bean>
+
+	<!-- Map List Example -->
+	<bean id="maplist" class="com.programmingsearch.java.MapListExample">
+		<property name="bptconfigs" ref="bptconfigs" />
+	</bean>
+	<util:map id="bptconfigs">
+		<!-- <entry key="brand"> <util:list> <value>FUZE Featured Brands</value> 
+			</util:list> </entry> -->
+		<entry key="category">
+			<util:list>
+				<value>FUZE Category Level 1</value>
+				<value>FUZE Category Level 2</value>
+				<value>FUZE Category Level 3</value>
+			</util:list>
+		</entry>
+		<entry key="industry">
+			<util:list>
+				<value>FUZE Market Level 1</value>
+				<value>FUZE Market Level 2</value>
+			</util:list>
+		</entry>
+	</util:map>
+	<!-- Spring life cycle start  -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="org.postgresql.Driver" />
+		<property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/jpa" />
+		<property name="properties">
+			<props>
+				<prop key="c3p0.acquire_increment">5</prop>
+				<prop key="c3p0.maxStatementsPerConnection">20</prop>
+				<prop key="c3p0.maxStatements ">100</prop>
+				<prop key="c3p0.maxPoolSize">500</prop>
+				<prop key="c3p0.max_statements">0</prop>
+				<prop key="c3p0.minPoolSize">5</prop>
+				<prop key="user">postgres</prop>
+				<prop key="password">password</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="pointsconfig.properties" />
+	</bean>
+ -->
+	<bean id="propertyConfigurer" class="com.programmingsearch.spring.lifecycle.PropertiesUtils">
+		<property name="dataSource" value="dataSource" />
+		<property name="localOverride" value="true" />
+		<property name="locations" value="pointsconfig.properties" />
+	</bean>
+	<bean class="com.programmingsearch.spring.lifecycle.DisplayNameBeanPostProcessor" />
+	<bean class="com.programmingsearch.spring.lifecycle.MyBeanFactory" />
+	<bean class="com.programmingsearch.spring.lifecycle.DisplaySetBeanNameAware"/>
+	
+	<context:annotation-config></context:annotation-config>
+	<context:component-scan base-package="com.programmingsearch.java.annot"></context:component-scan>
+</beans>
